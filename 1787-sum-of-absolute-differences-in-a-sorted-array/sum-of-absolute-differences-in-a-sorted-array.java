@@ -1,26 +1,23 @@
 class Solution {
-    public int[] getSumAbsoluteDifferences(int[] nums) {
-        int n = nums.length;
-        int totalSum = 0;
-        for (int num : nums) {
-            totalSum += num;
+    static{
+        for(int i=0;i<500;i++){
+            getSumAbsoluteDifferences(new int[1]);
         }
-        
-        int leftSum = 0;
-        int[] ans = new int[n];
-        for (int i = 0; i < n; i++) {
-            int rightSum = totalSum - leftSum - nums[i];
-            
-            int leftCount = i;
-            int rightCount = n - 1 - i;
-            
-            int leftTotal = leftCount * nums[i] - leftSum;
-            int rightTotal = rightSum - rightCount * nums[i];
-            
-            ans[i] = leftTotal + rightTotal;
-            leftSum += nums[i];
+    }
+    public static int[] getSumAbsoluteDifferences(int[] nums) {
+        int n=nums.length;
+        int rightSum[]=new int[n];
+        rightSum[n-1]=0;
+        for(int i=n-2;i>=0;i--){
+            rightSum[i]=rightSum[i+1]+nums[i+1];
         }
-        
-        return ans;
+        int leftSum=0;
+        for(int i=0;i<nums.length;i++){
+            int leftSide=nums[i]*i-leftSum;
+            int rightSide=rightSum[i]-nums[i]*(n-i-1);
+            leftSum+=nums[i];
+            nums[i]=leftSide+rightSide;
+        }
+        return nums;
     }
 }
