@@ -3,7 +3,7 @@ private:
     static const int MAXK = 6;
     int k;
     int n;
-    vector<array<int, MAXK>> tree;
+    vector<array<int, MAXK>> tree; 
 
     void makeLeaf(int o, int value) {
         tree[o].fill(0);
@@ -12,27 +12,25 @@ private:
         tree[o][k] = r;  // mul
     }
 
-    void mergePre(const array<int, MAXK>& left, const array<int, MAXK>& right,
-                  array<int, MAXK>& result) {
+    void mergePre(const array<int, MAXK>& left, const array<int, MAXK>& right, array<int, MAXK>& result) {
         result.fill(0);
-
+        
         int mulL = left[k];
         int mulR = right[k];
         result[k] = (mulL * mulR) % k;
 
-        // Case 1: Entirely within the left interval
         for (int x = 0; x < k; x++) {
             result[x] = left[x];
         }
 
-        // Case 2: Contains the entire left interval, followed by a prefix of
-        // the right interval
         for (int x = 0; x < k; x++) {
             result[(mulL * x) % k] += right[x];
         }
     }
 
-    void maintain(int o) { mergePre(tree[o * 2], tree[o * 2 + 1], tree[o]); }
+    void maintain(int o) {
+        mergePre(tree[o * 2], tree[o * 2 + 1], tree[o]);
+    }
 
     void build(const vector<int>& nums, int o, int l, int r) {
         if (l == r) {
@@ -58,10 +56,8 @@ public:
             return;
         }
         int m = (l + r) / 2;
-        if (index <= m)
-            update(o * 2, l, m, index, value);
-        else
-            update(o * 2 + 1, m + 1, r, index, value);
+        if (index <= m) update(o * 2, l, m, index, value);
+        else update(o * 2 + 1, m + 1, r, index, value);
         maintain(o);
     }
 
@@ -86,8 +82,7 @@ public:
 
 class Solution {
 public:
-    vector<int> resultArray(vector<int>& nums, int k,
-                            vector<vector<int>>& queries) {
+    vector<int> resultArray(vector<int>& nums, int k, vector<vector<int>>& queries) {
         int n = nums.size();
         SegmentTree seg(nums, k);
         vector<int> ans;
