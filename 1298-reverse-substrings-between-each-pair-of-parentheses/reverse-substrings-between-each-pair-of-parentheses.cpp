@@ -1,27 +1,23 @@
 class Solution {
 public:
-    string reverseParentheses(auto& s) {
-        int n = s.size();
-        vector<int> link(n), stk;
+    string reverseParentheses(string s) {
+        stack<string> st;
+        string curr;
 
-        for (int i = 0; i < n; i++) {
-            if (s[i] == '(')
-                stk.push_back(i);
-            else if (s[i] == ')') {
-                link[i] = stk.back();
-                link[link[i]] = i;
-                stk.pop_back();
+        for (char c : s) {
+            if (c == '(') {
+                st.push(curr);
+                curr.clear();
             }
-        }
-        string res;
-        for (int i = 0, dir = 1; i < n; i += dir) {
-            if (s[i] >= 'a')
-                res += s[i];
+            else if (c == ')') {
+                reverse(curr.begin(), curr.end());
+                curr = st.top() + curr;
+                st.pop();
+            }
             else {
-                i = link[i];
-                dir = -dir;
+                curr += c;
             }
         }
-        return res;
+        return curr;
     }
 };
