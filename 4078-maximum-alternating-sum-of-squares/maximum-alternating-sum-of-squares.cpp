@@ -1,12 +1,18 @@
+static const auto harsh = []() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
+}();
 class Solution {
 public:
     long long maxAlternatingSum(vector<int>& nums) {
-        vector<long long> sq;
-        for (int x : nums) sq.push_back(1LL * x * x);
-        int h = sq.size() / 2;
-        nth_element(sq.begin(), sq.begin() + h, sq.end());
-        long long total = accumulate(sq.begin(), sq.end(), 0LL);
-        long long small = accumulate(sq.begin(), sq.begin() + h, 0LL);
-        return total - 2 * small;
+        int n = nums.size(), i;
+        for(int i = 0; i < n; i++) nums[i] = abs(nums[i]);
+        nth_element(nums.begin(), nums.begin() + n / 2, nums.end());
+        long long res = 0;
+        for(i = 0; i < n / 2; i++) res -= nums[i] * nums[i];
+        for(; i < n; i++) res += nums[i] * nums[i];
+        return res;
     }
 };
