@@ -1,30 +1,24 @@
 class Solution {
     public int uniquePaths(int[][] grid) {
-        final int MOD = 1000000007;
-        int m = grid.length;
+        int m = 1_000_000_007;
         int n = grid[0].length;
+        int[] r = new int[n + 1];
+        int[] d = new int[n + 1];
+        r[0] = 1;
 
-        int[][][] f = new int[m][n][2];
-        f[0][0][0] = 1;
-
-        for (int i = 0; i < m; i++) {
+        for (int[] row : grid) {
             for (int j = 0; j < n; j++) {
-                if (i > 0) {
-                    if (grid[i - 1][j] == 0) {
-                        f[i][j][0] = (f[i - 1][j][0] + f[i - 1][j][1]) % MOD;
-                    } else {
-                        f[i][j][0] = f[i - 1][j][1];
-                    }
-                }
-                if (j > 0) {
-                    if (grid[i][j - 1] == 0) {
-                        f[i][j][1] = (f[i][j - 1][0] + f[i][j - 1][1]) % MOD;
-                    } else {
-                        f[i][j][1] = f[i][j - 1][0];
-                    }
+                if (row[j] == 0) {
+                    int c = (d[j + 1] + r[j]) % m;
+                    d[j + 1] = c;
+                    r[j + 1] = c;
+                } else {
+                    r[j + 1] = d[j + 1];
+                    d[j + 1] = r[j];
                 }
             }
+            r[0] = 0;
         }
-        return (f[m - 1][n - 1][0] + f[m - 1][n - 1][1]) % MOD;
+        return r[n];
     }
 }
